@@ -1,10 +1,10 @@
+import csv
 import json
 import matplotlib.pyplot as plt
 import numpy as np
 from pprint import pprint
 
 def GenerateHistogram(xPoints, yPoints):
-    # x = np.random.normal(size = 1000)
     x = np.arange(len(xPoints))
     plt.bar(x, height= yPoints)
     plt.xticks(x+.5, xPoints)
@@ -16,15 +16,20 @@ def ReadJson(fileName):
     dataPoints = json.load(open(fileName))
     return dataPoints
 
-def ReturnDataPoints(dict):
+def ReadCSV(fileName, noOfRows):
     carType = []
     carCount = []
-    vehicleDetails = dict["type"]
-    for vehicle in vehicleDetails:
-        carType.append(vehicle["VehicleBodyType"])
-        carCount.append(vehicle["count"])
+    with open(fileName) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        count = 0
+        for row in readCSV:
+            if(count <10):
+                carType.append(row[0])
+                carCount.append(int(row[1]))
+                count += 1
+            else:
+                break
     return carType, carCount
 
-dataPoints = ReadJson("output.json")
-carType, carCount = ReturnDataPoints(dataPoints)
+carType, carCount = ReadCSV("parking_data.csv", 10)
 GenerateHistogram(carType, carCount)
