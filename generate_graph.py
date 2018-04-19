@@ -23,7 +23,7 @@ def ReadCSV(fileName, noOfRows):
         readCSV = csv.reader(csvfile, delimiter=',')
         count = 0
         for row in readCSV:
-            if(count <10):
+            if(count <noOfRows):
                 carType.append(row[0])
                 carCount.append(int(row[1]))
                 count += 1
