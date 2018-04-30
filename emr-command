@@ -1,0 +1,4 @@
+JAR location : command-runner.jar
+Main class : None
+Arguments : spark-submit --master yarn --deploy-mode cluster --class NYCTickets s3://mcsds-cs498/spark-code/simpleproject_2.11-1.0.jar
+Action on failure: Continue
