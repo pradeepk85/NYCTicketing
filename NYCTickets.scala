@@ -66,7 +66,7 @@ object NYCTickets {
 
 
 
-    spark.wait()
+    spark.stop()
 
   }
 }
