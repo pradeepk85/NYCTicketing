@@ -4,11 +4,11 @@ import org.apache.spark.sql.functions._
 object NYCTickets {
   def main(args: Array[String]): Unit ={
     val spark = SparkSession.builder
-      .master("local[*]")
       .appName("Spark Word Count")
       .getOrCreate()
 
-    val nyc2013 = spark.read.format("csv").option("header", "true").load("s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv, s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2015.csv, s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2016.csv, s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2017.csv").cache()
+//    val nyc2013 = spark.read.format("csv").option("header", "true").load("s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv, s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2015.csv, s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2016.csv, s3://mcsds-cs498/input/Parking_Violations_Issued_-_Fiscal_Year_2017.csv").cache()
+    val nyc2013 = spark.read.format("csv").option("header", "true").load("s3://mcsds-cs498/input/*.csv")
 
     //Body Type
     val bodyType = nyc2013.groupBy("Vehicle Body Type").count().sort(desc("count"))
@@ -64,8 +64,9 @@ object NYCTickets {
     val violationTimeWithoutNull = violationTimeWithNewSchema.filter("hour is not null")
     violationTimeWithoutNull.coalesce(1).write.mode(SaveMode.Append).format("csv").option("header","false").save("s3://mcsds-cs498/output/violationtype/")
 
-    spark.stop()
+
+
+    spark.wait()
+
   }
 }
-
-
